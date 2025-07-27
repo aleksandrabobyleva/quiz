@@ -93,7 +93,7 @@ td:first-child {
 @media (min-width: 1024px) and (max-width: 1500px) {
   .paper {
     width: 45vw;
-    top: 40%;
+    top: 45%;
     padding: 2rem;
   }
   table {
