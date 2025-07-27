@@ -38,7 +38,7 @@ body {
 
 .paper {
   position: absolute;
-  top: 40%;
+  top: 35%;
   left: 50.5%;
   transform: translate(-50%, -50%);
   background: rgba(247, 247, 247, 0);
@@ -50,7 +50,7 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.8rem;
+  font-size: 1.5rem;
 }
 thead {
   font-weight: 900;
