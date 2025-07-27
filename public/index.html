@@ -43,54 +43,37 @@
             </table>
         </div>
     </div>
-  <script>
-  async function loadData() {
-    try {
-      const res = await fetch('https://quiz-58oj.onrender.com/teams');
-      if (res.ok) {
-        return await res.json();
-      }
-    } catch (e) {
-      console.error(e);
-    }
-    return [];
-  }
+    <script>
+        async function loadData() {
+            try {
+                const res = await fetch('https://quiz-58oj.onrender.com/teams');
+                if (res.ok) return await res.json();
+            } catch (e) {
+                console.error(e);
+            }
+            return [];
+        }
 
-  async function renderTable() {
-    const tbody = document.querySelector("#scoreTable tbody");
-    tbody.innerHTML = "";
-    const teams = await loadData();
+        async function renderTable() {
+            const tbody = document.querySelector("#scoreTable tbody");
+            tbody.innerHTML = '';
+            const teams = await loadData();
 
-    if (teams.length === 0) {
-      tbody.innerHTML = "<tr><td colspan='5'>Данные не найдены. Пожалуйста, введите баллы в админке.</td></tr>";
-      return;
-    }
+            teams.forEach(team => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+          <td>${team.name}</td>
+          <td>${team.case1}</td>
+          <td>${team.case2}</td>
+          <td>${team.cipher}</td>
+          <td class="total">${Number(team.case1) + Number(team.case2) + Number(team.cipher)}</td>
+        `;
+                tbody.appendChild(tr);
+            });
+        }
 
-    teams.forEach(team => {
-      const tr = document.createElement("tr");
-
-      let td = document.createElement("td");
-      td.textContent = team.name;
-      tr.appendChild(td);
-
-      ["case1", "case2", "cipher"].forEach(key => {
-        td = document.createElement("td");
-        td.textContent = team[key];
-        tr.appendChild(td);
-      });
-
-      td = document.createElement("td");
-      td.className = "total";
-      const total = Number(team.case1) + Number(team.case2) + Number(team.cipher);
-      td.textContent = total;
-      tr.appendChild(td);
-
-      tbody.appendChild(tr);
-    });
-  }
-
-  window.addEventListener("DOMContentLoaded", renderTable);
-</script>
+        window.addEventListener('DOMContentLoaded', renderTable);
+    </script>
 
 </body>
 
