@@ -69,7 +69,7 @@ thead :last-child {
 th {
   background-color: #dddddd0f;
   color: #282727;
- }
+}
 
 th:first-child,
 td:first-child {
@@ -130,7 +130,7 @@ td[contenteditable="true"] {
 
 td[contenteditable="true"]:focus {
   background-color: transparent;
-  border: 1px solid rgba(49, 48, 48, 0.78)
+  border: 1px solid rgba(49, 48, 48, 0.78);
 }
 
 td[contenteditable="true"] {
