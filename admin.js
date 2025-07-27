@@ -1,24 +1,30 @@
 const defaultTeams = [
   { name: "Team 1", case1: 0, case2: 0, cipher: 0 },
-  { name: "Team 2", case1: 0, case2: 0, cipher: 0 }
+  { name: "Team 2", case1: 0, case2: 0, cipher: 0 },
 ];
 
-function loadData() {
-  const data = localStorage.getItem("teamsData");
-  if (data) {
-    try {
-      return JSON.parse(data);
-    } catch {
-      return defaultTeams;
+async function loadData() {
+  try {
+    const res = await fetch("https://quiz-58oj.onrender.com/teams");
+    if (res.ok) {
+      return await res.json();
     }
+  } catch (e) {
+    console.error(e);
   }
   return defaultTeams;
 }
 
-function saveData(data) {
-  localStorage.setItem("teamsData", JSON.stringify(data));
-  
-  window.dispatchEvent(new Event('storage'));
+async function saveData(data) {
+  try {
+    await fetch("https://quiz-58oj.onrender.com/teams", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 function updateTotal(row, data) {
@@ -27,10 +33,10 @@ function updateTotal(row, data) {
   totalCell.textContent = total;
 }
 
-function renderTable() {
+async function renderTable() {
   const tbody = document.querySelector("#scoreTable tbody");
   tbody.innerHTML = "";
-  const teams = loadData();
+  const teams = await loadData();
 
   teams.forEach((team, index) => {
     const tr = document.createElement("tr");
@@ -48,7 +54,7 @@ function renderTable() {
     tr.appendChild(tdName);
 
     // Баллы
-    ["case1", "case2", "cipher"].forEach(key => {
+    ["case1", "case2", "cipher"].forEach((key) => {
       const td = document.createElement("td");
       const inputNum = document.createElement("input");
       inputNum.type = "number";
@@ -67,7 +73,8 @@ function renderTable() {
     // Итог
     const tdTotal = document.createElement("td");
     tdTotal.className = "total";
-    tdTotal.textContent = Number(team.case1) + Number(team.case2) + Number(team.cipher);
+    tdTotal.textContent =
+      Number(team.case1) + Number(team.case2) + Number(team.cipher);
     tr.appendChild(tdTotal);
 
     tbody.appendChild(tr);
