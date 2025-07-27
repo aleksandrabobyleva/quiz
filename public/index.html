@@ -7,12 +7,10 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 </head>
 
 <body>
     <div class="board">
-
         <div class="paper">
             <table id="scoreTable">
                 <thead>
@@ -26,55 +24,45 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Team 1</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td contenteditable="true">Team 1</td>
+                        <td contenteditable="true">0</td>
+                        <td contenteditable="true">0</td>
+                        <td contenteditable="true">0</td>
                         <td>0</td>
                     </tr>
                     <tr>
-                        <td>Team 2</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td contenteditable="true">Team 2</td>
+                        <td contenteditable="true">0</td>
+                        <td contenteditable="true">0</td>
+                        <td contenteditable="true">0</td>
                         <td>0</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
     <script>
-        async function loadData() {
-            try {
-                const res = await fetch('https://quiz-58oj.onrender.com/teams');
-                if (res.ok) return await res.json();
-            } catch (e) {
-                console.error(e);
-            }
-            return [];
-        }
+        // Обработчик пересчёта Total при изменении ячеек
+        const rows = document.querySelectorAll("#scoreTable tbody tr");
+        rows.forEach(row => {
+            // Получаем все редактируемые ячейки кроме Total (последней)
+            const editableCells = Array.from(row.querySelectorAll("td[contenteditable='true']"));
 
-        async function renderTable() {
-            const tbody = document.querySelector("#scoreTable tbody");
-            tbody.innerHTML = '';
-            const teams = await loadData();
-
-            teams.forEach(team => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-          <td>${team.name}</td>
-          <td>${team.case1}</td>
-          <td>${team.case2}</td>
-          <td>${team.cipher}</td>
-          <td class="total">${Number(team.case1) + Number(team.case2) + Number(team.cipher)}</td>
-        `;
-                tbody.appendChild(tr);
+            editableCells.forEach(cell => {
+                cell.addEventListener("input", () => {
+                    // Считаем сумму по case1, case2, cipher
+                    // Название команды — первая ячейка, числа — со 2-й по 4-ю
+                    let sum = 0;
+                    for (let i = 1; i <= 3; i++) {
+                        const val = Number(row.cells[i].innerText.trim());
+                        sum += isNaN(val) ? 0 : val;
+                    }
+                    row.cells[4].innerText = sum;
+                });
             });
-        }
-
-        window.addEventListener('DOMContentLoaded', renderTable);
+        });
     </script>
-
 </body>
 
 </html>

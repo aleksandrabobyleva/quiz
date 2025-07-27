@@ -121,3 +121,18 @@ td:first-child {
     color: #161616;
   }
 }
+
+td[contenteditable="true"] {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  transition: border 0.2s ease;
+}
+
+td[contenteditable="true"]:focus {
+  background-color: transparent;
+}
+
+td[contenteditable="true"] {
+  cursor: text;
+}
