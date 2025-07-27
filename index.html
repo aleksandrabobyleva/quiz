@@ -43,24 +43,65 @@
     </div>
 
     <script>
-        // Обработчик пересчёта Total при изменении ячеек
-        const rows = document.querySelectorAll("#scoreTable tbody tr");
-        rows.forEach(row => {
-            // Получаем все редактируемые ячейки кроме Total (последней)
-            const editableCells = Array.from(row.querySelectorAll("td[contenteditable='true']"));
+        const table = document.getElementById('scoreTable');
+        const rows = table.querySelectorAll("tbody tr");
 
+        // Функция пересчёта Total для строки
+        function recalcRowTotal(row) {
+            let sum = 0;
+            for (let i = 1; i <= 3; i++) {
+                const val = Number(row.cells[i].innerText.trim());
+                sum += isNaN(val) ? 0 : val;
+            }
+            row.cells[4].innerText = sum;
+        }
+
+        // Сохраняем все данные из таблицы в localStorage
+        function saveTableToLocalStorage() {
+            const data = [];
+            rows.forEach(row => {
+                const rowData = {
+                    team: row.cells[0].innerText.trim(),
+                    case1: row.cells[1].innerText.trim(),
+                    case2: row.cells[2].innerText.trim(),
+                    cipher: row.cells[3].innerText.trim(),
+                };
+                data.push(rowData);
+            });
+            localStorage.setItem('scoreTableData', JSON.stringify(data));
+        }
+
+        // Загружаем данные из localStorage и вставляем в таблицу
+        function loadTableFromLocalStorage() {
+            const data = localStorage.getItem('scoreTableData');
+            if (!data) return;
+
+            const parsedData = JSON.parse(data);
+            parsedData.forEach((rowData, index) => {
+                if (rows[index]) {
+                    rows[index].cells[0].innerText = rowData.team;
+                    rows[index].cells[1].innerText = rowData.case1;
+                    rows[index].cells[2].innerText = rowData.case2;
+                    rows[index].cells[3].innerText = rowData.cipher;
+                    recalcRowTotal(rows[index]);
+                }
+            });
+        }
+
+        // Обработчик input: пересчитать сумму и сохранить данные
+        rows.forEach(row => {
+            const editableCells = Array.from(row.querySelectorAll("td[contenteditable='true']"));
             editableCells.forEach(cell => {
                 cell.addEventListener("input", () => {
-                    // Считаем сумму по case1, case2, cipher
-                    // Название команды — первая ячейка, числа — со 2-й по 4-ю
-                    let sum = 0;
-                    for (let i = 1; i <= 3; i++) {
-                        const val = Number(row.cells[i].innerText.trim());
-                        sum += isNaN(val) ? 0 : val;
-                    }
-                    row.cells[4].innerText = sum;
+                    recalcRowTotal(row);
+                    saveTableToLocalStorage();
                 });
             });
+        });
+
+        // При загрузке страницы — загрузить данные из localStorage
+        window.addEventListener('DOMContentLoaded', () => {
+            loadTableFromLocalStorage();
         });
     </script>
 </body>
