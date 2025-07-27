@@ -1,0 +1,123 @@
+body {
+  font-family: "Special Elite", monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: #2a2a2a;
+  text-align: center;
+}
+
+body {
+  background-image: url("background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.board {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("detective-board2.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.paper {
+  position: absolute;
+  top: 40%;
+  left: 50.5%;
+  transform: translate(-50%, -50%);
+  background: rgba(247, 247, 247, 0);
+  width: clamp(420px, 45vw, 1000px);
+
+  padding: 2rem 2rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+thead {
+  font-weight: 900;
+}
+th,
+td {
+  padding: 0.5rem 0.5rem;
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
+}
+thead :last-child {
+  color: #6a0202;
+}
+
+th {
+  background-color: #dddddd0f;
+  color: #282727;
+  border-collapse: collapse;
+}
+
+th:first-child,
+td:first-child {
+  max-width: 100px;
+}
+
+/* Медиа-запрос для большого экрана (TV) — ширина от 3000px */
+@media (min-width: 3000px) {
+  .paper {
+    width: 45vw;
+    top: 40%;
+    padding: 2rem;
+  }
+  table {
+    font-size: 1.5rem;
+  }
+}
+
+/* Медиа-запрос для макбука (1024px - 1440px) */
+@media (min-width: 1024px) and (max-width: 1500px) {
+  .paper {
+    width: 45vw;
+    top: 40%;
+    padding: 2rem;
+  }
+  table {
+    font-size: 1.5rem;
+  }
+}
+
+/* Медиа-запрос для iPhone 15 (максимум 428px ширина) */
+@media (max-width: 436px) {
+  body {
+    background-image: none !important;
+  }
+
+  .paper {
+    width: 100vw;
+    top: 42%;
+    padding: 0.2rem;
+  }
+  table {
+    font-size: 1rem;
+    color: #242424;
+  }
+  th {
+    padding: 0.2rem;
+    color: #161616;
+  }
+}

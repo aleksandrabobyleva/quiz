@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Баллы</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body>
+    <div class="board">
+
+        <div class="paper">
+            <table id="scoreTable">
+                <thead>
+                    <tr>
+                        <th>Team</th>
+                        <th>Case №1</th>
+                        <th>Case №2</th>
+                        <th>Cipher</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Team 1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Team 2</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        function loadData() {
+            const data = localStorage.getItem("teamsData");
+            if (data) {
+                try {
+                    return JSON.parse(data);
+                } catch {
+                    return [];
+                }
+            }
+            return [];
+        }
+
+        function renderTable() {
+            const tbody = document.querySelector("#scoreTable tbody");
+            tbody.innerHTML = "";
+            const teams = loadData();
+
+            if (teams.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='5'>Данные не найдены. Пожалуйста, введите баллы в админке.</td></tr>";
+                return;
+            }
+
+            teams.forEach(team => {
+                const tr = document.createElement("tr");
+
+             
+                let td = document.createElement("td");
+                td.textContent = team.name;
+                tr.appendChild(td);
+
+                 ["case1", "case2", "cipher"].forEach(key => {
+                    td = document.createElement("td");
+                    td.textContent = team[key];
+                    tr.appendChild(td);
+                });
+
+               
+                td = document.createElement("td");
+                td.className = "total";
+                const total = Number(team.case1) + Number(team.case2) + Number(team.cipher);
+                td.textContent = total;
+                tr.appendChild(td);
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.addEventListener("DOMContentLoaded", renderTable);
+
+         window.addEventListener('storage', (e) => {
+            if (e.key === 'teamsData') {
+                renderTable();
+            }
+        });
+    </script>
+</body>
+
+</html>
